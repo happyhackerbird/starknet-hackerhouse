@@ -141,6 +141,10 @@ contract VotingEscrow is ERC20 {
         LockedBalance memory _Locked,
         LockAction _action
     ) internal {
+        require(
+            ERC20(GREEN).balanceOf(_addr) >= _value,
+            "Not enough GREEN balance"
+        );
         LockedBalance memory newLocked = LockedBalance({
             amount: _Locked.amount,
             end: _Locked.end
@@ -160,9 +164,11 @@ contract VotingEscrow is ERC20 {
         // newLocked.end > block.timestamp
         _checkpoint(_addr, _Locked, newLocked);
 
-        if (_value != 0) {
-            ERC20(GREEN).safeTransferFrom(_addr, address(this), _value);
-        }
+        // if (_value != 0) {
+        //     ERC20(GREEN).safeTransferFrom(_addr, address(this), _value);
+        // }
+        // mint veGREEN
+        // _mint(_add
         emit Deposit(_addr, _value, newLocked.end, _action, block.timestamp);
     }
 
